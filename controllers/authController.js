@@ -45,17 +45,18 @@ export const createSession = async function (req, res) {
         })
 
     } catch (err) {
+        console.log('Error 500',err)
         console.log('Error in the create Session module', err);
         res.send(err)
     }
 }
 
 export const ytUpdate = async function (req, res) {
-    console.log('API : /update-yt-links')
+    console.log('API : /update-yt-links',req.body)
     try {
         const { ytId, link } = req?.body
 
-        if (!ytId && !url) {
+        if (!ytId && !link) {
             return res.status(400).json({
                 message: 'Invalid Credentials or Details'
             })
@@ -76,6 +77,7 @@ export const ytUpdate = async function (req, res) {
 
     } catch (error) {
         if (error) {
+            console.log('Error 500',error)
             return res.status(500).json({
                 message: 'Internal Server Error'
             })
@@ -111,7 +113,12 @@ export const imageUpdate = async function (req,res){
             }
         })
     } catch (error) {
-        
+        if(error){
+            console.log('Error 500',error)
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            })
+        }
     }
 }
 
@@ -141,6 +148,7 @@ export const textUpdate = async function (req, res) {
 
     } catch (error) {
         if (error) {
+            console.log('Error 500',error)
             return res.status(500).json({
                 message: 'Internal Server Error'
             })

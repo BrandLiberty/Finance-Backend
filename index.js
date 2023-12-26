@@ -5,6 +5,8 @@ import cors from 'cors'
 const app = express()
 import path from 'path'
 const __dirname = path.resolve(path.dirname(''));
+import passport from 'passport';
+import jwtStrategy from './config/passport_jwt.js'
 
 // Connecting to the database 
 import db from './config/mongoose.js'

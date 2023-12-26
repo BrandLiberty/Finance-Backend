@@ -8,8 +8,7 @@ const youTubeLinkSchema = new Schema({
     },
     link : {
         type : String,
-        required: true,
-        unique : true
+        required: true
     }
 },{
     timestamps : true
