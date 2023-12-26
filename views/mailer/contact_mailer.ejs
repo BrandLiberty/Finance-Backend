@@ -1,0 +1,19 @@
+<div>
+    <h3>New Contact Added</h3>
+    <div>
+        <p>
+            User Name : <%= user.name%>
+        </p>
+        <p>
+            Email : <%= user.email%>
+        </p>
+        <p>
+            Phone : <%= user.phone%>
+        </p>
+        <% if(user.message){%>
+            <p>
+                Message : <%= user.message%>
+            </p>
+        <%}%>
+    </div>
+</div>
