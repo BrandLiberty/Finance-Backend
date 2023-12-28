@@ -1,8 +1,12 @@
 import User from "../models/User.js";
 import YouTubeLinks from "../models/YouTubeLinks.js";
-import Image from "../models/Images.js";
+import Image from "../models/Image.js";
+import Property from "../models/Property.js";
 import jwt from 'jsonwebtoken'
 import Text from "../models/Text.js";
+import fs ,{existsSync} from 'node:fs'
+import path from 'path'
+const __dirname = path.resolve(path.dirname(''));
 
 export const createSession = async function (req, res) {
     try {
@@ -45,14 +49,14 @@ export const createSession = async function (req, res) {
         })
 
     } catch (err) {
-        console.log('Error 500',err)
+        console.log('Error 500', err)
         console.log('Error in the create Session module', err);
         res.send(err)
     }
 }
 
 export const ytUpdate = async function (req, res) {
-    console.log('API : /update-yt-links',req.body)
+    console.log('API : /update-yt-links', req.body)
     try {
         const { ytId, link } = req?.body
 
@@ -70,14 +74,14 @@ export const ytUpdate = async function (req, res) {
         } else {
             ytdb = await YouTubeLinks.create({ ytId, link })
         }
-        
+
         return res.status(200).json({
             message: 'Link Updated Successfully'
         })
 
     } catch (error) {
         if (error) {
-            console.log('Error 500',error)
+            console.log('Error 500', error)
             return res.status(500).json({
                 message: 'Internal Server Error'
             })
@@ -85,36 +89,36 @@ export const ytUpdate = async function (req, res) {
     }
 }
 
-export const imageUpdate = async function (req,res){
+export const imageUpdate = async function (req, res) {
     console.log('API : /update-image')
     try {
-        await Image.uploadImage(req,res,async function(err){
-            if(err){
-                console.log('LOG : Multer Error',err)
+        await Image.uploadImage(req, res, async function (err) {
+            if (err) {
+                console.log('LOG : Multer Error', err)
                 return res.status(500).json({
-                    message : 'Internal Server Error'
+                    message: 'Internal Server Error'
                 })
-            }   
-            const {imageId} = req.body 
-            if(req.file){
-                console.log('INFO : FILE INFO',req?.file)
+            }
+            const { imageId } = req.body
+            if (req.file) {
+                console.log('INFO : FILE INFO', req?.file)
 
-                let imagedb = await Image.findOne({imageId : imageId})
+                let imagedb = await Image.findOne({ imageId: imageId })
 
-                if(!imagedb){
-                    imagedb = await Image.create({imageId})
+                if (!imagedb) {
+                    imagedb = await Image.create({ imageId })
                 }
 
-                if(imagedb.path){
-                    fs.unlinkSync(path.join(__dirname , imagedb.path))
+                if (imagedb.path) {
+                    fs.unlinkSync(path.join(__dirname, imagedb.path))
                 }
                 imagedb.path = Image.imagePath + '/' + req.file.filename
                 imagedb.save()
             }
         })
     } catch (error) {
-        if(error){
-            console.log('Error 500',error)
+        if (error) {
+            console.log('Error 500', error)
             return res.status(500).json({
                 message: 'Internal Server Error'
             })
@@ -141,16 +145,113 @@ export const textUpdate = async function (req, res) {
         } else {
             textdb = await Text.create({ textId, text })
         }
-        
+
         return res.status(200).json({
             message: 'Text Updated Successfully'
         })
 
     } catch (error) {
         if (error) {
-            console.log('Error 500',error)
+            console.log('Error 500', error)
             return res.status(500).json({
                 message: 'Internal Server Error'
+            })
+        }
+    }
+}
+
+export const propertyUpdate = async (req, res) => {
+    try {
+        await Property.uploadImgArr(req, res, async function (err) {
+            if (err) {
+                console.log('LOG : Multer Error 1', err)
+                return res.status(500).json({
+                    message: 'Internal Server Error'
+                })
+            }
+            console.log('API : /update-property', req.body)
+            const { prptId, mainImg, imgArr, prjName, prptDest, prptDsc } = req.body
+
+            if (!prptId) {
+                return res.status(400).json({
+                    message: 'Invalid Credentials or Details'
+                })
+            }
+
+            let prptdb = await Property.findOne({ prptId })
+            if (!prptdb) {
+                prptdb = await Property.create({ prptId })
+            }
+            for (let el of Object.keys(req.body)) {
+                switch (el) {
+                    case 'prjName':
+                        prptdb.prjName = prjName
+                        break;
+                    case 'prptDest':
+                        prptdb.prptDest = prptDest
+                        break;
+                    case 'prptDsc':
+                        prptdb.prptDsc = prptDsc
+                        break;
+                }
+            }
+            if (req.files['mainImg']) {
+                if(prptdb.mainImg){
+                    fs.unlinkSync(path.join(__dirname , prptdb.mainImg))
+                }
+                prptdb.mainImg = Property.imagePath + '/' + req.files['mainImg'][0].filename
+            }
+            console.log('IMAGE ARRAY',req.files['imgArr'])
+            if(req.files['imgArr']){
+                for(let el of prptdb.imgArr){
+                    if(el){
+                        fs.unlinkSync(path.join(__dirname , el))
+                    }
+                }
+                prptdb.imgArr = [];
+                for(let image of req.files['imgArr']){
+                    prptdb.imgArr.push(Property.imagePath + '/' + image.filename)
+                }
+            }
+
+            console.log('Final Updated PPRT ',prptdb)
+            prptdb.save()
+            return res.status(200).json({
+                message: 'Property Updated Successfully'
+            })
+
+        })
+    } catch (error) {
+        if (error) {
+            console.log('Error 500', error)
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            })
+        }
+    }
+}
+
+export const deleteProperty = async (req,res)=>{
+    console.log('API : /get-property',req.params)
+    const {id} = req.params
+    try {
+        Property.findOneAndDelete({prptId : id})
+        .then(data=>{
+            return res.status(200).json({
+                message : `${data.prjName} with id ${data.prptId} deleted`
+            })
+        })
+        .catch(error=>{
+            console.log('Error deleting the project',error)
+            return res.status(400).json({
+                message : 'No Property available for this id'
+            })
+        })
+
+    } catch (error) {
+        if(error){
+            return res.status(500).json({
+                message : 'Internal Server Error'
             })
         }
     }

@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-const youTubeLinkSchema = new Schema({
+const youTubeLinkSchema = new mongoose.Schema({
     ytId : {
         type : String,
         required: true,

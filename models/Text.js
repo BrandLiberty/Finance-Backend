@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-const textSchema = new Schema({
+const textSchema = new mongoose.Schema({
     textId : {
         type : String,
         required: true,
