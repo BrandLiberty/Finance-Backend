@@ -235,6 +235,21 @@ export const deleteProperty = async (req,res)=>{
     console.log('API : /get-property',req.params)
     const {id} = req.params
     try {
+        Property.findOne({prptId : id})
+        .then(data=>{
+            if(data.mainImg){
+                fs.unlinkSync(path.join(__dirname, data.mainImg))
+            }
+            if(data.imgArr?.length>0){
+                for(let image of data.imgArr){
+                    fs.unlinkSync(path.join(__dirname, image))
+                }
+            }
+        })
+        .catch(error=>{
+            console.log('UNABLE TO UNLINKSYNC',error)
+        })
+
         Property.findOneAndDelete({prptId : id})
         .then(data=>{
             return res.status(200).json({
