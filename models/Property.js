@@ -8,7 +8,7 @@ const propertySchema = new mongoose.Schema({
     prptId: {
         type: String,
         required: true,
-        unique: true
+        unique : true
     },
     prjName: {
         type: String,

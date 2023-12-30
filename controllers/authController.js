@@ -197,17 +197,12 @@ export const propertyUpdate = async (req, res) => {
             }
             if (req.files['mainImg']) {
                 if(prptdb.mainImg){
-                    fs.unlinkSync(path.join(__dirname , prptdb.mainImg))
+                     fs.unlinkSync(path.join(__dirname , prptdb.mainImg))
                 }
                 prptdb.mainImg = Property.imagePath + '/' + req.files['mainImg'][0].filename
             }
             console.log('IMAGE ARRAY',req.files['imgArr'])
             if(req.files['imgArr']){
-                for(let el of prptdb.imgArr){
-                    if(el){
-                        fs.unlinkSync(path.join(__dirname , el))
-                    }
-                }
                 prptdb.imgArr = [];
                 for(let image of req.files['imgArr']){
                     prptdb.imgArr.push(Property.imagePath + '/' + image.filename)
@@ -215,7 +210,7 @@ export const propertyUpdate = async (req, res) => {
             }
 
             console.log('Final Updated PPRT ',prptdb)
-            prptdb.save()
+            await prptdb.save()
             return res.status(200).json({
                 message: 'Property Updated Successfully'
             })
@@ -232,7 +227,7 @@ export const propertyUpdate = async (req, res) => {
 }
 
 export const deleteProperty = async (req,res)=>{
-    console.log('API : /get-property',req.params)
+    console.log('API : /delete-property',req.params)
     const {id} = req.params
     try {
         Property.findOne({prptId : id})
