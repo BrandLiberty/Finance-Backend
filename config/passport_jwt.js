@@ -29,7 +29,7 @@ passport.use(new JWTStrategy(opts, async function (req, jwtPayload, done) {
     //     .catch(err => {
     //         console.log('Error finding user through JWT._id', err);
     //     })
-    if(jwtPayload.id==='123456' && jwtPayload.password === '123456'){
+    if(jwtPayload.id==='FinanceInnovationID' && jwtPayload.password === 'FianaceInnovationPassword@123'){
         return done(null, jwtPayload)
     }else{
         return done(null, false);

@@ -4,7 +4,7 @@ import passport from "passport";
 const router  = express.Router()
 
 import { createSession , imageUpdate, ytUpdate , textUpdate, propertyUpdate, deleteProperty} from '../controllers/authController.js'
-import { getYtLink , getImage, getText, getProperty, getPropertyById , insuranceRequest, contactRequest} from '../controllers/homeController.js';
+import { getYtLink , getImage, getText, getProperty, getPropertyById , insuranceRequest, loanRequest, contactRequest} from '../controllers/homeController.js';
 
 // Admin Sign In 
 router.post('/create-session',createSession)
@@ -29,6 +29,7 @@ router.post('/delete-property/:id',passport.authenticate('jwt',{session : false}
 
 // Contact Forms 
 router.post('/insurance-request',insuranceRequest)
+router.post('/loan-request',loanRequest)
 router.post('/contact-request',contactRequest)
 
 export default router

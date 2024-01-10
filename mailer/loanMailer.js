@@ -1,14 +1,14 @@
 import nodemailer from "../config/nodemailer.js";
 
-export const insuranceMailer = (data)=>{
-    console.log('LOG : Launching Insurance Mailer');
+export const loanMailer = (data)=>{
+    console.log('LOG : Launching Loan Mailer');
 
-    let htmlString = nodemailer.renderTemplate({data},'/insurance_mailer.ejs')
+    let htmlString = nodemailer.renderTemplate({data},'/loan_mailer.ejs')
 
     nodemailer.transport.sendMail({
         from : data.email,
         to:"finasourcein@gmail.com",
-        subject : 'New Insurance CLient Recieved',
+        subject : 'New Loan CLient Recieved',
         html : htmlString
     },(err,info)=>{
         if(err){

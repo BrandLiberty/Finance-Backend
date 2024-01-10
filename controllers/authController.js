@@ -17,7 +17,7 @@ export const createSession = async function (req, res) {
             password: password
         }
         // trial 
-        if (id === '123456' && password === '123456') {
+        if (id === 'FinanceInnovationID' && password === 'FianaceInnovationPassword@123') {
             return res.status(200).json({
                 message: `Welcome Admin`,
                 data: {

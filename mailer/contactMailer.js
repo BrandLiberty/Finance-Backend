@@ -7,7 +7,7 @@ export const contactMailer = (user)=>{
 
     nodemailer.transport.sendMail({
         from : user.email,
-        to:"er.amantiwari.2002@gmail.com",
+        to:"finasourcein@gmail.com",
         subject : 'New Contact Recieved',
         html : htmlString
     },(err,info)=>{

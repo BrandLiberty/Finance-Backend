@@ -6,7 +6,9 @@ import Property from "../models/Property.js";
 import Insurance from "../models/Insurance.js";
 import { insuranceMailer } from "../mailer/insuranceMailer.js";
 import {contactMailer} from '../mailer/contactMailer.js'
+import { loanMailer } from "../mailer/loanMailer.js";
 import Contact from "../models/Contact.js";
+import Loan from "../models/Loan.js";
 
 export const getYtLink = async (req,res)=>{
     console.log('API : /get-yt-link',req.params)
@@ -152,6 +154,34 @@ export const insuranceRequest = async (req,res)=>{
         })
     }
 }
+
+
+export const loanRequest = async (req,res)=>{
+    try {
+        console.log('/loan-request',req.body)
+        await Loan.create(req.body)
+        .then(data=>{
+            loanMailer(data)
+            return res.status(200).json({
+                message : 'Your Request Is Successfully Accepted. We Will Soon Contact You'
+            })
+        })
+
+        .catch(err=>{
+            console.log('DATABASE ERROR', err)
+            return res.status(500).json({
+                message : 'Internal Server Error'
+            })
+        })
+        
+    }catch (error) {
+        console.log("catch error",error)
+        return res.status(500).json({
+            message : 'Internal Server Error'
+        })
+    }
+}
+
 
 export const contactRequest = async(req,res)  => {
     try {
