@@ -1,7 +1,7 @@
 import nodemailer from "../config/nodemailer.js";
 
 export const loanMailer = (data)=>{
-    console.log('LOG : Launching Loan Mailer');
+    console.log('LOG : Launching Loan Mailer',data);
 
     let htmlString = nodemailer.renderTemplate({data},'/loan_mailer.ejs')
 

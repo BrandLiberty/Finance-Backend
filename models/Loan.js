@@ -25,7 +25,10 @@ const loanSchema = new mongoose.Schema({
     },
     loanType: {
         type: String
-    }
+    },
+    contactNumber: {
+        type: String
+    },
 }, {
     timestamps: true
 })

@@ -10,7 +10,7 @@ let transport = nodemailer.createTransport({
     secure : false,
     auth : {
         user : "finasourcedir@gmail.com",
-        pass : "rqrqavuvouzccncx"
+        pass : "ntbtlbnlljozuisa"
 
     },
     tls :{

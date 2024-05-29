@@ -25,7 +25,10 @@ const insuranceSchema = new mongoose.Schema({
     },
     insuranceType: {
         type: String
-    }
+    },
+    contactNumber: {
+        type: String
+    },
 }, {
     timestamps: true
 })
